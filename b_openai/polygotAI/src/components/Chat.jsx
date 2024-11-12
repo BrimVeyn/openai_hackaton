@@ -6,7 +6,7 @@ import { getAssistantResponse } from '@/api/openaiService'; // Import API Servic
 
 export function Chat() {
   const [messages, setMessages] = useState([
-    { sender: 'Assistant', text: 'Hi, how can I help you today?' },
+    { sender: 'Assistant', text: 'Hello there, what exciting topic would you like to explore today ?' },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false); // State pour le chargement
