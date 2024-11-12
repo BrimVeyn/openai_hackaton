@@ -4,5 +4,9 @@ build:
 run:
 	docker run -d -p 8080:8080 hackaton
 
-clean:
+stop:
+	docker stop $$(docker ps -q | head -n 1)
+
+
+clean: stop
 	docker system prune -af
