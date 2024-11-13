@@ -3,10 +3,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { getAssistantResponse } from '@/api/openaiService'; // Import API Service
+import { Flashcard } from './FlashCard';
+import { useVariable } from '../VariablesContext';
 
 export function Chat() {
+  const { show, setShow,setContent } = useVariable();
   const [messages, setMessages] = useState([
-    { sender: 'Assistant', text: 'Hello there, what exciting topic would you like to explore today ?' },
+    { sender: 'Assistant', text: 'Hey ! Give me a topic you would like to learn more about' },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false); // State pour le chargement
@@ -21,7 +24,7 @@ export function Chat() {
 
     try {
       // Appel API pour obtenir une réponse de l'assistant
-      const assistantResponse = await getAssistantResponse(userMessage);
+      const assistantResponse = await getAssistantResponse(userMessage, setShow,setContent);
 
       setMessages((prev) => [
         ...prev,
@@ -38,19 +41,20 @@ export function Chat() {
   };
 
   return (
+    <>
     <div className="rounded-xl border bg-card text-card-foreground shadow h-screen w-1/3 flex flex-col">
       <div className="space-y-1.5 p-6 flex flex-row items-center">
         <div className="flex items-center space-x-4">
           <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
             <img
               className="aspect-square h-full w-full"
-              alt="Avatar"
+              alt = "A"
               src="/avatars/01.png"
             />
           </span>
           <div>
-            <p className="text-sm font-medium leading-none">Sofia Davis</p>
-            <p className="text-sm text-muted-foreground">m@example.com</p>
+            <p className="text-sm font-medium leading-none">User</p>
+            <p className="text-sm text-muted-foreground">user.name@gmail.com</p>
           </div>
         </div>
       </div>
@@ -126,5 +130,6 @@ export function Chat() {
         </Button>
       </div>
     </div>
+    </>
   );
 }
