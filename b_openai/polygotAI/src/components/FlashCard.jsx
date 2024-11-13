@@ -1,41 +1,80 @@
-"use client";
+// "use client";
+import React, { useEffect, useState } from 'react';
 import { CardStack } from "aceternity/card-stack";
 import { useVariable } from "../VariablesContext";
 
-const cards_stack = []; // Tableau global pour stocker plusieurs tas
+const FlashCard = ({ card }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
 
-export function FlashCardStack() {
-  const { cards } = useVariable();
-
-  // Ajouter un nouveau tas uniquement s'il est non vide et unique
-  if (cards && cards.length > 0) {
-    const exists = cards_stack.some(
-      (stack) => JSON.stringify(stack) === JSON.stringify(cards)
-    );
-    if (!exists) {
-      cards_stack.push(cards);
-    }
-  }
-
-  // Vérifie si aucun tas n'existe
-  if (cards_stack.length === 0) return null;
+  const handleClick = (e) => {
+    e.stopPropagation(); // Stop event from bubbling up to CardStack
+    setIsFlipped(!isFlipped);
+  };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6">
-      {cards_stack.map((stack, stackIndex) => (
-        <div
-          key={stackIndex}
-        >
-          <CardStack
-            items={stack.map((card, cardIndex) => ({
-              id: `${stackIndex}-${cardIndex}`,
-              name: card.word,
-              designation: card.translation,
-              content: <p>{card.description}</p>,
-            }))}
-          />
+    <div
+      className="relative w-full h-64"
+      onClick={handleClick}
+      style={{ pointerEvents: 'auto' }} // Ensure clicks are captured
+    >
+      <div
+        className={`absolute w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''
+          }`}
+      >
+        {/* Front side - Description */}
+        <div className="absolute w-full h-full p-6 bg-white rounded-lg shadow-lg [backface-visibility:hidden] cursor-pointer">
+          <div className="flex items-center justify-center h-full">
+            <p className="text-gray-800 text-center">{card.description}</p>
+          </div>
         </div>
-      ))}
+
+        {/* Back side - Word and Translation */}
+        <div className="absolute w-full h-full p-6 bg-white rounded-lg shadow-lg [backface-visibility:hidden] [transform:rotateY(180deg)] cursor-pointer">
+          <div className="flex flex-col items-center justify-center h-full space-y-4">
+            <h3 className="text-xl font-bold text-gray-900">{card.word}</h3>
+            <p className="text-lg text-gray-600">{card.translation}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export function FlashCardStack() {
+  const { cards, setCards } = useVariable();
+  // useEffect(() => {
+
+    // setCards(cards.map((card, cardIndex) => ({
+    //   id: `card-${cardIndex}`, // Unique id for each card
+    //   content: <FlashCard key={card.id || cardIndex} card={card} />,
+    // })));
+    console.log('got changement on cards', cards);
+  // }, [cards]);
+  console.log("CARDDS", cards);
+
+  return (
+    <div className="grid grid-cols-1 gap-6 p-6">
+      <div className="relative perspective-[1000px]" style={{ touchAction: 'none' }}>
+        {cards.map((card) => (
+          <div key={card.id} className='bg-red-100 w-[500px]'>
+            {card.word}
+            <p>
+              <FlashCard card={card} key={card.id}/>
+            </p>
+          </div>
+        ))}
+        <CardStack
+          key={JSON.stringify(cards)} // Force re-render when cards change
+          items={cards.map((card, cardIndex) => ({
+              id: `card-${cardIndex}`, // Unique id for each card
+              content: <FlashCard key={card.id || cardIndex} card={card} />,
+            }))}
+          onVote={(item) => {
+            // Prevent default CardStack behavior if needed
+            return false;
+          }}
+        />
+      </div>
     </div>
   );
 }
