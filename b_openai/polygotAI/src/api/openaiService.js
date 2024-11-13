@@ -1,18 +1,29 @@
 import OpenAI from "openai";
-import { Flashcard } from '@/components/FlashCard';
 import { useState } from "react";
 
 const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 
-export function generate_flashcard(args, setShow, setContent) {
-	setShow(true);
-	setContent(args);
-	console.log("Args:", args);
-	return true
+export function generate_flashcard(args, setShow, setContent, setCards) {
+  try {
+    setShow(true);
+    setContent(args); // Optional if you still want to store raw args
+
+    const flashcards = JSON.parse(args); // Assurez-vous que `args` est une chaîne JSON valide
+
+    const cards = flashcards.words.map((word, index) => ({
+      word,
+      translation: flashcards.translated_words[index],
+      description: flashcards.descriptions[index],
+    }));
+
+    setCards(cards); // Mise à jour de la pile de cartes
+  } catch (error) {
+    console.error("Error generating flashcard:", error);
+  }
 }
 
-export async function getAssistantResponse(userMessage, setShow, setContent) {
+export async function getAssistantResponse(userMessage, setShow, setContent, setCards) {
   try {
     
     const assistant = await openai.beta.assistants.retrieve("asst_GyI3Cd5WyjmUpgna5VaIVwfI");
@@ -51,7 +62,7 @@ export async function getAssistantResponse(userMessage, setShow, setContent) {
 
 				switch (funcName) {
 					case 'generate_flashcard':
-						generate_flashcard(funcArgs, setShow,setContent )
+						await generate_flashcard(funcArgs, setShow, setContent, setCards);
 						break;
 					default:
 						break;

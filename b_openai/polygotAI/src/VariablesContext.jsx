@@ -5,11 +5,12 @@ const VariableContext = createContext();
 
 // Create a provider component
 export default function VariableProvider({ children }) {
-  const [show, setShow] = useState(false); // Add your initial state or replace `null` with initial value
-  const [content, setContent] = useState(null); // Add your initial state or replace `null` with initial value
+  const [show, setShow] = useState(false);
+  const [content, setContent] = useState(null);
+  const [cards, setCards] = useState([]); // Défini correctement
 
   return (
-    <VariableContext.Provider value={{ show, setShow, content, setContent }}>
+    <VariableContext.Provider value={{ show, setShow, content, setContent, cards, setCards }}>
       {children}
     </VariableContext.Provider>
   );

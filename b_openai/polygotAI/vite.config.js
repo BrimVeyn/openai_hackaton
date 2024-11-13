@@ -7,6 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-    },
-  },
+      'aceternity': path.resolve(__dirname, './src/aceternity/ui'), // Correction ici
+      'shadcn': path.resolve(__dirname, './src/shadcn'), // Alias correct pour Shadcn
+    }
+  }
 });
