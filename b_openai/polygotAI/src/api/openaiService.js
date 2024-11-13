@@ -63,6 +63,7 @@ export async function getAssistantResponse(userMessage, setShow, setContent, set
 				switch (funcName) {
 					case 'generate_flashcard':
 						await generate_flashcard(funcArgs, setShow, setContent, setCards);
+						return "generate_flashcard()"
 						break;
 					default:
 						break;
