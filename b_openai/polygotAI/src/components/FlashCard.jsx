@@ -44,31 +44,23 @@ export function FlashCardStack() {
   const { cards, setCards } = useVariable();
   // useEffect(() => {
 
-    // setCards(cards.map((card, cardIndex) => ({
-    //   id: `card-${cardIndex}`, // Unique id for each card
-    //   content: <FlashCard key={card.id || cardIndex} card={card} />,
-    // })));
-    console.log('got changement on cards', cards);
+  // setCards(cards.map((card, cardIndex) => ({
+  //   id: `card-${cardIndex}`, // Unique id for each card
+  //   content: <FlashCard key={card.id || cardIndex} card={card} />,
+  // })));
+  console.log('got changement on cards', cards);
   // }, [cards]);
   console.log("CARDDS", cards);
 
   return (
     <div className="grid grid-cols-1 gap-6 p-6">
       <div className="relative perspective-[1000px]" style={{ touchAction: 'none' }}>
-        {cards.map((card) => (
-          <div key={card.id} className='bg-red-100 w-[500px]'>
-            {card.word}
-            <p>
-              <FlashCard card={card} key={card.id}/>
-            </p>
-          </div>
-        ))}
         <CardStack
           key={JSON.stringify(cards)} // Force re-render when cards change
           items={cards.map((card, cardIndex) => ({
-              id: `card-${cardIndex}`, // Unique id for each card
-              content: <FlashCard key={card.id || cardIndex} card={card} />,
-            }))}
+            id: `card-${cardIndex}`, // Unique id for each card
+            content: <FlashCard key={card.id || cardIndex} card={card} />,
+          }))}
           onVote={(item) => {
             // Prevent default CardStack behavior if needed
             return false;

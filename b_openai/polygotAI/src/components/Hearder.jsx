@@ -4,9 +4,9 @@ export default function Header() {
 
     return (
 
-        <div className="text-center font-bold text-5xl">
+        <div className="text-center font-bold text-5xl mt-10">
 
-            FLASH CARD⚡
+            GAME || FLASH CARD⚡
         </div>
     )
 }

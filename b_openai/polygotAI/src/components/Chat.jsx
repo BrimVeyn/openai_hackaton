@@ -7,7 +7,7 @@ import { FlashCardStack } from './FlashCard';
 import { useVariable } from '../VariablesContext';
 
 export function Chat() {
-  const { show, setShow, setContent, content, setCards, addCard } = useVariable();
+  const { show, setShow, showGame, setShowGame, setContent, content, contentGame, setContentGame, setCards, addCard } = useVariable();
   const [messages, setMessages] = useState([
     { sender: 'Assistant', text: 'Hey! Give me a topic you would like to learn more about.' },
   ]);
@@ -30,7 +30,7 @@ export function Chat() {
     setLoading(true);
 
     try {
-      const assistantResponse = await getAssistantResponse(userMessage, setShow, setContent, setCards, addCard);
+      const assistantResponse = await getAssistantResponse(userMessage, setShow, setContent, setCards, setShowGame, setContentGame, addCard);
 
       setMessages((prev) => [
         ...prev,
@@ -57,21 +57,21 @@ export function Chat() {
         <div className="space-y-1.5 p-6 flex flex-row items-center">
           <div className="flex items-center space-x-4">
             <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-              <img
+              {/* <img
                 className="aspect-square h-full w-full"
                 alt="A"
                 src="/avatars/01.png"
-              />
+              /> */}
             </span>
             <div>
-              <p className="text-sm font-medium leading-none">User</p>
-              <p className="text-sm text-muted-foreground">user.name@gmail.com</p>
+              <p className="text-xl font-large leading-none">Chat</p>
+
             </div>
           </div>
         </div>
 
         {/* Messages Section - unchanged */}
-        <ScrollArea className="flex-grow overflow-y-auto p-6 pt-0 space-y-4">
+        <ScrollArea className="flex-grow overflow-y-auto p-6 pt-0 space-y-[10px]">
           {messages.map((msg, index) => (
             <div
               key={index}
